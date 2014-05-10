@@ -20,6 +20,8 @@ src/vendor/js/
 src/vendor/css/
 dist/
 dev/
+.idea/
+
 
 psd/
 *.psd
