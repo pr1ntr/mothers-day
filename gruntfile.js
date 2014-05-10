@@ -124,23 +124,6 @@ module.exports = function(grunt) {
         watch: {
             files: ['<%= jshint.files %>' ,  '<%= stylus.dev.options.paths +"/**/*.styl" %>' , 'package.json' ],
             tasks: ['jshint' ,'stylus:dev' ,'concat:dev' ]
-        },      
-        connect: {
-            dev: {
-                options: {
-                    port:3001,
-                    base: "./dev"
-
-                }
-            },
-            dist: {
-                options: {
-                    port:3001,
-                    base: "./dist"
-
-                }
-            }
-
         }
 
     });
@@ -152,14 +135,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-bower');
 
-    grunt.loadNpmTasks('grunt-contrib-connect');
+
 
   
 
-    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev',  'connect:dev' , 'watch']);
-    grunt.registerTask('dev', ['jshint', 'concat:dev','stylus:dev', 'connect:dev' , 'watch']);
-    grunt.registerTask('dist', ['jshint', 'concat:dist', 'uglify' , 'stylus:dist', 'cssmin' ]);
-    grunt.registerTask('dist:test', ['jshint', 'concat:dist', 'uglify' , 'stylus:dist', 'cssmin', "connect:dist"]);
+    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev', 'watch']);
+    grunt.registerTask('dev', ['jshint', 'stylus:dev', 'concat:dev', 'watch']);
+    grunt.registerTask('dist', ['jshint', 'stylus:dist', 'concat:dist', 'uglify' , 'cssmin' ]);
+    grunt.registerTask('dist:test', ['jshint', 'stylus:dist', 'concat:dist', 'uglify' , 'cssmin']);
     grunt.registerTask('bower-init', ['bower' ]);
   
    
