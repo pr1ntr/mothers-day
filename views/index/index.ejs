@@ -2,6 +2,7 @@
 <html data-cdn="<%= cdn_root %>" >
 <head>
     <title><%= recipient.title %></title>
+    <link href='http://fonts.googleapis.com/css?family=Josefin+Slab:400,700,700italic' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="js/<%= name %>-vendors.<%= suffix %>js"></script>
     <script type="text/javascript" src="js/<%= name %>.<%= suffix  %>js"></script>
     <link rel="stylesheet" type="text/css" href="css/<%= name %>-vendors.css">
@@ -9,12 +10,29 @@
 
 </head>
 <body>
-<h1><%= recipient.name %></h1>
+<header>
+    <h1><%= recipient.greeting %></h1>
+</header>
+<article id="envelope-container">
+    <div class="envelope back"></div>
+    <div class="envelope contents">
+        <div class="pull" id="card-handle">
+
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <%- recipient.message %>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="envelope front"></div>
+</article>
+
+
+
 <script type="text/javascript">
-
-
-
-    
 
 </script>
 </body>

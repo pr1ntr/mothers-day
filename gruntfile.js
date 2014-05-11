@@ -10,10 +10,10 @@ module.exports = function(grunt) {
                     paths: ['src/stylus'],
                     define: {"cdn_root" : "<%= pkg.deploy.prod.cdn_root %>"},
                     use: [
-                        
+
                     ],
                     import: [      //  @import 'foo', 'bar/moo', etc. into every .styl file
-                      
+
                     ]
                 },
                 files: {
@@ -26,10 +26,10 @@ module.exports = function(grunt) {
                     paths: ['src/stylus'],
                     define: {"cdn_root" : "<%= pkg.deploy.dev.cdn_root %>"},
                     use: [
-                        
+
                     ],
                     import: [      //  @import 'foo', 'bar/moo', etc. into every .styl file
-                      
+
                     ]
                 },
                 files: {
@@ -41,45 +41,60 @@ module.exports = function(grunt) {
         },
 
         cssmin: {
-          add_banner: {
-            options: {
-              banner: '/* minified vendor css file */'
-            },
-            files: {
-              'dist/css/<%= pkg.name %>-vendors-min.css': ['dev/css/<%= pkg.name %>-vendors.css']
+            add_banner: {
+                options: {
+                    banner: '/* minified vendor css file */'
+                },
+                files: {
+                    'dist/css/<%= pkg.name %>-vendors-min.css': ['dev/css/<%= pkg.name %>-vendors.css']
+                }
             }
-          }
         },
         bower: {
-          dev: {
-            dest: 'src/vendor',
-            js_dest: 'src/vendor/js',
-            css_dest: 'src/vendor/css'
-          }
+            dev: {
+                dest: 'src/vendor',
+                js_dest: 'src/vendor/js',
+                css_dest: 'src/vendor/css',
+                options: {
+                    expand:true,
+                    packageSpecific: {
+                        'greensock': {
+                            keepExpandedHierarchy: true,
+                            files: [
+                                'src/uncompressed/TweenMax.js',
+                                'src/uncompressed/TimelineMax.js',
+                                'src/uncompressed/easing/EasePack.js'
+                            ]
+                        }
+                    }
+                }
+            }
         },
 
         concat: {
-          options: {
-            // define a string to put between each file in the concatenated output
-            separator: ';'
-          },
-          dev: {
-            // the files to concatenate
-            files: {
-                'dev/js/<%= pkg.name %>.js' : [
-                   
-                    'src/js/base.js',
-                    'src/js/**/*.js'
-                ],
-                'dev/js/<%= pkg.name %>-vendors.js' : [
-                    'src/vendor/js/**/*.js'
-                ],
-                'dev/css/<%= pkg.name %>-vendors.css' : [
-                    'src/vendor/css/**/*.css'
-                ]
-            }
-          },
-          dist: {
+            options: {
+                // define a string to put between each file in the concatenated output
+                separator: ';'
+            },
+            dev: {
+                // the files to concatenate
+                files: {
+                    'dev/js/<%= pkg.name %>.js' : [
+
+                        'src/js/base.js',
+                        'src/js/**/*.js'
+                    ],
+                    'dev/js/<%= pkg.name %>-vendors.js' : [
+
+
+                        'src/vendor/js/**/*.js'
+                    ],
+                    'dev/css/<%= pkg.name %>-vendors.css' : [
+                        'src/vendor/css/**/*.css'
+                    ]
+                }
+            },
+            dist: {
                 // the files to concatenate
                 files: {
                     'dist/js/<%= pkg.name %>.js' : [
@@ -94,11 +109,11 @@ module.exports = function(grunt) {
                         'src/vendor/css/**/*.css'
                     ]
                 }
-          }
+            }
         },
         uglify: {
             options: {
-            // the banner is inserted at the top of the output
+                // the banner is inserted at the top of the output
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
             },
             dist: {
@@ -113,7 +128,7 @@ module.exports = function(grunt) {
             files: ['gruntfile.js', 'src/js/**/*.js' , 'app/**/*.js'],
             // configure JSHint (documented at http://www.jshint.com/docs/)
             options: {
-            // more options here if you want to override JSHint defaults
+                // more options here if you want to override JSHint defaults
                 globals: {
                     jQuery: true,
                     console: true,
@@ -122,8 +137,36 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['<%= jshint.files %>' ,  '<%= stylus.dev.options.paths +"/**/*.styl" %>' , 'package.json' ],
-            tasks: ['jshint' ,'stylus:dev' ,'concat:dev' ]
+            files: ['<%= jshint.files %>' ,  '<%= stylus.dev.options.paths +"/**/*.styl" %>' , 'package.json' , 'src/images/**/*' ],
+            tasks: ['jshint' ,'stylus:dev' ,'concat:dev' , 'copy:dev' ]
+        },
+        copy: {
+            dist: {
+                files: [
+                    {
+                        expand:true,
+                        cwd: "src/images/",
+                        src: ["*"],
+                        dest: "dist/images/",
+                        filter: 'isFile'
+                    }
+
+
+                ]
+            },
+            dev: {
+                files: [
+                    {
+                        expand:true,
+                        cwd: "src/images/",
+                        src: ["*"],
+                        dest: "dev/images/",
+                        filter: 'isFile'
+                    }
+
+
+                ]
+            }
         }
 
     });
@@ -133,17 +176,17 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-bower');
 
 
 
-  
 
-    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev', 'watch']);
-    grunt.registerTask('dev', ['jshint', 'stylus:dev', 'concat:dev', 'watch']);
-    grunt.registerTask('dist', ['jshint', 'stylus:dist', 'concat:dist', 'uglify' , 'cssmin' ]);
-    grunt.registerTask('dist:test', ['jshint', 'stylus:dist', 'concat:dist', 'uglify' , 'cssmin']);
+
+    grunt.registerTask('default', ['jshint', 'concat:dev','stylus:dev','copy:dev' , 'watch']);
+    grunt.registerTask('dev', ['default']);
+    grunt.registerTask('dist', ['jshint', 'stylus:dist', 'concat:dist', 'uglify' , 'cssmin' , 'copy:dist' ]);
     grunt.registerTask('bower-init', ['bower' ]);
-  
-   
+
+
 };

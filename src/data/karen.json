@@ -1,8 +1,8 @@
 
 {
     "id" : "karen",
-    "title" : "Happy Mother's Day",
+    "title" : "Happy Mother's Day Karen",
     "name" : "Karen",
-    "message" : ""
+    "message" : "<span class='salutation'>Mom,</span><p>Thank you for you for all of the hard work you put in to be such a great mother. Thank you for all your advice and wisdom. It may not seem like it all the time but I value everything you say and everything you do for us.</p><span class='closing'>With Love,<br/>Pavel</span>"
 }
 
